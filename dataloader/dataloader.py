@@ -40,7 +40,8 @@ class HDDLoader(td.Dataset):
 
         totensor = transforms.Compose(
             [transforms.Resize((224, 224)),
-             transforms.ToTensor()])
+             transforms.ToTensor()
+             ])
 
         assert (index < len(self.data))
         assert (index < self.len)
@@ -87,7 +88,8 @@ class HDDLoader(td.Dataset):
             target = after_aug
             #print(after_aug)
         newImg = Image.fromarray(img)
-        return totensor(newImg), np.array(target), index
+        targets=np.float32(np.array(target))
+        return totensor(newImg), targets, index
 
 
 '''
