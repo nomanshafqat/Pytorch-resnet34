@@ -54,11 +54,11 @@ class Trendage(Dataset):
         shuffle(self.data)
 
         for i,name in enumerate(self.data):
-            print(name)
+            #print(name)
             str=open(os.path.join(directory,name)[:-3]+"txt").readlines()
             bbox=str[0].split(",")
             box=[int (a) for a in bbox]
-            print(box)
+            #print(box)
             self.bbox.append(box)
         print(len(self.bbox),len(self.data))
 
