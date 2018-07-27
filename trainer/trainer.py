@@ -58,7 +58,10 @@ class Trainer():
             loss.backward()
             self.optimizer.step()
             train_loss += loss.item()
+
         train_loss = train_loss / len(self.train_iterator)
+        print(train_loss)
+
         logger.info("Avg Loss %s", str(train_loss))
 
 
