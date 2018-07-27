@@ -54,7 +54,7 @@ class Trainer():
             #loss=nn.MSELoss()
             #loss(output,Variable(targets))
 
-            print("Loss", loss)
+            #print("Loss", loss)
             loss.backward()
             self.optimizer.step()
             train_loss += loss.item()
