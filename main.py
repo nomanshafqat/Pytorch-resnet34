@@ -6,19 +6,40 @@ import dataset
 import models
 import dataloader
 import trainer
+
+
 parser = argparse.ArgumentParser(description='Pen refinement')
 
+parser.add_argument('--batch-size', type=int, default=32, metavar='N',
+                    help='input batch size for training (default: 16)')
+parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
+                    help='learning rate (default: 0.00001)')
+parser.add_argument('--dataset-path', default="", help="Directory containing data")
+
+parser.add_argument('--epochs', type=int, default=14, metavar='N',
+                    help='Total number of epochs to run')
+
+parser.add_argument('--log-interval', type=int, default=5, metavar='N',
+                    help='how many batches to wait before logging training status')
+
+parser.add_argument('--cuda', action='store_true', default=True,
+                    help=' CUDA training')
+
+parser.add_argument('--no-cuda', action='store_true', default=False,
+                    help='without CUDA training')
+
+
 args = parser.parse_args()
-args.cuda=False
-args.no_cuda=True
-args.batch_size=50
-args.epochs=1
-args.lr=1e-4
+#args.cuda=False
+#args.no_cuda=True
+#args.batch_size=50
+#args.epochs=1
+#args.lr=1e-4
 args.momentum=0.9
 args.decay=4e-4
 args.schedule=[4,8,12]
 args.gammas=[0.2, 0.2, 0.2]
-args.dataset_path="/Users/nomanshafqat/Desktop/newdata"
+#args.dataset_path="/Users/nomanshafqat/Desktop/newdata"
 
 logger = utils.Logger("../", "pens").get_logger()
 args.cuda = not args.no_cuda and torch.cuda.is_available()

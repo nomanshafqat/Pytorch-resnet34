@@ -1,0 +1,1 @@
+python main.py --dataset-path /Users/nomanshafqat/Desktop/newdata --epoch 14  --batch-size 50 --no-cuda --log-interval 1 --lr 1e-4
