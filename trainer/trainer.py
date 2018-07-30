@@ -51,7 +51,7 @@ class Trainer():
 
             #print(np.array(targets))
 
-            print("output=",output[0],targets[0])
+            #print("output=",output[0],targets[0])
 
             loss = F.mse_loss(output, Variable(targets).float())
             #loss=nn.MSELoss()

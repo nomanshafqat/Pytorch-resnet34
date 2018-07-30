@@ -94,7 +94,7 @@ class HDDLoader(td.Dataset):
             # print(after_aug)
         newImg = Image.fromarray(img)
         targets = np.float32(np.array(target))
-        print(targets)
+        #print(targets)
         ##draw = cv2.rectangle(cv2.resize(np.array(newImg), (224, 224)), (t[1], t[0]), (t[3], t[2]), color=(0, 0, 0),
         #                     thickness=6)
 
