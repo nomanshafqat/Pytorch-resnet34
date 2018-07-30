@@ -46,25 +46,30 @@ class HDDLoader(td.Dataset):
         assert (index < len(self.data))
         assert (index < self.len)
         images = self.data[index]
-        #print(images)
+        # print(images)
         img = cv2.imread(os.path.join(self.dataset.directory, images))
 
         target = self.labels[index]
 
         scale = np.array(img.shape) / 224
 
-        #print(img.shape, scale)
+        # img = cv2.rectangle(img, (target[0]-10, target[1]-10), (target[2]+10, target[3]+10),
+        #                     color=(255, 255, 0), thickness=10)
+
+        # cv2.imwrite(os.path.join("res", str(index)+".jpg"), draw)
+
+        # print(img.shape, scale)
         img = cv2.resize(img, (224, 224))
 
-        #print(target)
+        # print(target)
 
-        target[0] = int(target[0] / scale[0])
-        target[1] = int(target[1] / scale[1])
-        target[2] = int(target[2] / scale[0])
-        target[3] = int(target[3] / scale[1])
+        target[0] = int(target[0] / scale[1] - 5)
+        target[1] = int(target[1] / scale[0] - 5)
+        target[2] = int(target[2] / scale[1] + 5)
+        target[3] = int(target[3] / scale[0] + 5)
 
-        #print(target)
-
+        # print(target)
+        t = target
         if self.transform is not None:
             seq_det = self.transform.to_deterministic()  # call this for each batch again, NOT only once at the start
 
@@ -81,14 +86,23 @@ class HDDLoader(td.Dataset):
 
             target = seq_det.augment_keypoints(keypoints_on_images)
             for point in target[0].keypoints:
-                #print(point)
+                # print(point)
                 x_new, y_new = point.x, point.y
                 after_aug.append(point.x)
                 after_aug.append(point.y)
             target = after_aug
-            #print(after_aug)
+            # print(after_aug)
         newImg = Image.fromarray(img)
-        targets=np.float32(np.array(target))
+        targets = np.float32(np.array(target))
+        print(targets)
+        ##draw = cv2.rectangle(cv2.resize(np.array(newImg), (224, 224)), (t[1], t[0]), (t[3], t[2]), color=(0, 0, 0),
+        #                     thickness=6)
+
+        #draw = cv2.rectangle(cv2.resize(np.array(draw), (224, 224)), (targets[0], targets[1]), (targets[2], targets[3]),
+        #                     color=(0, 255, 0), thickness=3)
+
+        #cv2.imwrite(os.path.join("res", str(index) + ".jpg"), draw)
+
         return totensor(newImg), targets, index
 
 

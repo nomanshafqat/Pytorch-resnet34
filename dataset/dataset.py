@@ -75,7 +75,7 @@ class Trendage(Dataset):
         self.val_data = self.data[mid_index:end_index]
         self.val_labels = self.bbox[mid_index:end_index]
 
-        sometimes = lambda aug: iaa.Sometimes(0.5, aug)
+        sometimes = lambda aug: iaa.Sometimes(0.8, aug)
 
         # Define our sequence of augmentation steps that will be applied to every image
         # All augmenters with per_channel=0.5 will sample one value _per image_
@@ -84,12 +84,12 @@ class Trendage(Dataset):
         seq = iaa.Sequential(
             [
                 # apply the following augmenters to most images
-                iaa.Fliplr(0.5),  # horizontally flip 50% of all images
-                iaa.Flipud(0.2),  # vertically flip 20% of all images
+                #iaa.Fliplr(0.5),  # horizontally flip 50% of all images
+                #iaa.Flipud(0.2),  # vertically flip 20% of all images
 
                 # crop images by -5% to 10% of their height/width
                 sometimes(iaa.CropAndPad(
-                    percent=(-0.05, 0.1),
+                    percent=(-0.1, 0.1),
                     pad_mode=ia.ALL,
                     pad_cval=(0, 255)
                 ))
