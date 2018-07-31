@@ -53,10 +53,22 @@ class Trainer():
 
             #print("output=",output[0],targets[0])
 
-            regr_loss = F.mse_loss(regr, Variable(regr_targets).float())
+
+
             cls_loss=self.criterion(clas,clas_targets.long())
 
-            loss=regr_loss+cls_loss
+
+            regr_loss = F.mse_loss(regr, Variable(regr_targets).float(),reduce=False)
+
+            regr_loss1=regr_loss.mean(dim=1)
+
+            regr_loss1*=clas_targets.float()
+            regr_loss2=regr_loss1.mean()
+
+            loss = regr_loss2 + cls_loss
+
+            print(regr_loss1,cls_loss,regr_loss2)
+
 
             #loss=nn.MSELoss()
             #loss(output,Variable(targets))

@@ -3,3 +3,11 @@
 .idea/vcs.xml
 *.xml
 *.xml
+*.pyc
+*.jpg
+*.zip
+models/__pycache__/model.cpython-36.pyc
+.DS_Store
+*.xml
+.idea/workspace.xml
+*.xml
