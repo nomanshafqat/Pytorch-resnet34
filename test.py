@@ -1,20 +1,13 @@
 import argparse
-
 import os
 import torch
-import torch.nn.functional as F
 from PIL import Image
 from torch.autograd import Variable
 from torchvision.transforms import transforms
 
-from tqdm import tqdm
 import  cv2
 import numpy as np
-import utils
-import dataset
 import models
-import dataloader
-import trainer
 
 parser = argparse.ArgumentParser(description='Pen refinement')
 
@@ -66,10 +59,13 @@ with torch.no_grad():
         #print("input=",input1.shape,input1)
 
         input=cv2.imread(os.path.join(args.dir, imgname))
-        output = model(input1)
-        output=np.array(output[0]).astype(int)
-        print(output)
 
-        draw=cv2.rectangle(cv2.resize(input,(224,224)),(output[0],output[1]),(output[2],output[3]),color=(0,255,0),thickness=3)
+        regr,clas = model(input1)
+
+        regr=np.array(regr[0]).astype(int)
+        print(regr)
+        print(clas)
+
+        draw=cv2.rectangle(cv2.resize(input,(224,224)),(regr[0],regr[1]),(regr[2],regr[3]),color=(0,255,0),thickness=3)
 
         cv2.imwrite(os.path.join("res",imgname),draw)

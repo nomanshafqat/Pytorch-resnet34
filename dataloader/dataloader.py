@@ -21,9 +21,10 @@ import numpy as np
 
 
 class HDDLoader(td.Dataset):
-    def __init__(self, dataset, data, labels, transform):
+    def __init__(self, dataset, data, bbox,labels, transform):
         self.data = data
         self.labels = labels
+        self.bbox=bbox
         self.transform = transform
         self.len = len(self.data)
         self.dataset = dataset
@@ -49,7 +50,7 @@ class HDDLoader(td.Dataset):
         # print(images)
         img = cv2.imread(os.path.join(self.dataset.directory, images))
 
-        target = self.labels[index]
+        target = self.bbox[index]
 
         scale = np.array(img.shape) / 224
 
@@ -93,7 +94,16 @@ class HDDLoader(td.Dataset):
             target = after_aug
             # print(after_aug)
         newImg = Image.fromarray(img)
-        targets = np.float32(np.array(target))
+        reg_targets = np.float32(np.array(target))
+
+        b=self.labels[index]
+
+        #a = np.array(self.labels[index])
+        #b = np.zeros((a.size, 2))
+        #b[np.arange(a.size), a] = 1
+
+        #print("B=",b,self.labels[index])
+
         #print(targets)
         ##draw = cv2.rectangle(cv2.resize(np.array(newImg), (224, 224)), (t[1], t[0]), (t[3], t[2]), color=(0, 0, 0),
         #                     thickness=6)
@@ -102,24 +112,26 @@ class HDDLoader(td.Dataset):
         #                     color=(0, 255, 0), thickness=3)
 
         #cv2.imwrite(os.path.join("res", str(index) + ".jpg"), draw)
+        #print(reg_targets)
 
-        return totensor(newImg), targets, index
+        return totensor(newImg), reg_targets,b ,index
 
 
-'''
-dataset = dataset.Trendage("/Users/nomanshafqat/Desktop/newdata/")
+if __name__ == "__main__":
 
-train_loader = dataloader.HDDLoader(dataset, dataset.train_data, dataset.train_labels, dataset.transform)
-val_loader = dataloader.HDDLoader(dataset, dataset.val_data, dataset.val_labels, dataset.transform)
+    dataset = dataset.Trendage("/Users/nomanshafqat/Desktop/newdata/","/Users/nomanshafqat/Desktop/negatives")
 
-kwargs = {'num_workers': 1, 'pin_memory': True} if False else {}
+    train_loader = dataloader.HDDLoader(dataset, dataset.train_data,dataset.bbox, dataset.train_labels, dataset.transform)
+    val_loader = dataloader.HDDLoader(dataset, dataset.val_data,dataset.bbox, dataset.val_labels, dataset.transform)
 
-train_iterator = torch.utils.data.DataLoader(train_loader,
-                                             batch_size=2, shuffle=True, **kwargs)
+    kwargs = {'num_workers': 1, 'pin_memory': True} if False else {}
 
-val_iterator = torch.utils.data.DataLoader(val_loader,
-                                           batch_size=2, shuffle=True, **kwargs)
-a = train_iterator.__iter__()
+    train_iterator = torch.utils.data.DataLoader(train_loader,
+                                                 batch_size=500, shuffle=True, **kwargs)
 
-print(next(a))
-'''
+    val_iterator = torch.utils.data.DataLoader(val_loader,
+                                               batch_size=2, shuffle=True, **kwargs)
+    a = train_iterator.__iter__()
+
+    next(a)
+

@@ -37,15 +37,15 @@ class Trainer():
         self.model.train()
         train_loss = 0
         logger.info("Epoch : %d", epoch)
-        for input1, targets, _ in tqdm(self.train_iterator):
+        for input1, regr_targets,clas_targets, _ in tqdm(self.train_iterator):
             if self.cuda:
-                input1, targets = input1.cuda(), targets.cuda()
+                input1, regr_targets,clas_targets = input1.cuda(), regr_targets.cuda(),clas_targets.cuda()
                 self.model.cuda()
 
             self.optimizer.zero_grad()
             #print("input1=", input1.shape)
 
-            output = self.model(Variable(input1))
+            regr,clas = self.model(Variable(input1))
 
             #print("output=", output.shape)
 
@@ -53,7 +53,11 @@ class Trainer():
 
             #print("output=",output[0],targets[0])
 
-            loss = F.mse_loss(output, Variable(targets).float())
+            regr_loss = F.mse_loss(regr, Variable(regr_targets).float())
+            cls_loss=self.criterion(clas,clas_targets.long())
+
+            loss=regr_loss+cls_loss
+
             #loss=nn.MSELoss()
             #loss(output,Variable(targets))
 

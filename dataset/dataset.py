@@ -19,7 +19,7 @@ import utils
 import imgaug as ia
 from imgaug import augmenters as iaa
 import numpy as np
-
+from sklearn.utils import shuffle
 
 logger = logging.getLogger('trendage')
 
@@ -41,11 +41,12 @@ class Trendage(Dataset):
     """
     """
 
-    def __init__(self, directory="data"):
+    def __init__(self, directory,ne=None):
 
         super().__init__("ddwd",directory)
         self.data = []
         self.bbox = []
+        self.labels=[]
         self.transform = transforms.Compose(
             [transforms.Resize((224, 224)),
              transforms.ToTensor()])
@@ -58,22 +59,38 @@ class Trendage(Dataset):
             str=open(os.path.join(directory,name)[:-3]+"txt").readlines()
             bbox=str[0].split(",")
             box=[int (a) for a in bbox]
+            #print(len(bbox))
             #print(box)
-            self.bbox.append(box)
+            self.bbox.append(box[:4])
+            #print(box[:4],)
+            if len(bbox)==5:
+                self.labels.append(0)
+            else:
+                self.labels.append(1)
+
         print(len(self.bbox),len(self.data))
 
 
-        logger.info("Positive examples %d", len(self.data))
+
+        p = np.random.permutation(len(self.data))
+
+        self.labels=np.array(self.labels)[p]
+        self.bbox=np.array(self.bbox)[p]
+        self.data=np.array(self.data)[p]
+
+
 
 
         beg_index = 0
-        mid_index = int(len(self.data) * 0.8)
+        mid_index = int(len(self.data) * 0.9)
         end_index = len(self.data)
         self.train_data = self.data[beg_index:mid_index]
-        self.train_labels = self.bbox[beg_index:mid_index]
+        self.train_labels = self.labels[beg_index:mid_index]
+        self.train_bboxes = self.bbox[beg_index:mid_index]
 
         self.val_data = self.data[mid_index:end_index]
-        self.val_labels = self.bbox[mid_index:end_index]
+        self.val_labels = self.labels[mid_index:end_index]
+        self.val_bboxes = self.bbox[beg_index:mid_index]
 
         sometimes = lambda aug: iaa.Sometimes(0.8, aug)
 
@@ -89,7 +106,7 @@ class Trendage(Dataset):
 
                 # crop images by -5% to 10% of their height/width
                 sometimes(iaa.CropAndPad(
-                    percent=(-0.1, 0.1),
+                    percent=(-0.15, 0.15),
                     pad_mode=ia.ALL,
                     pad_cval=(0, 255)
                 ))
