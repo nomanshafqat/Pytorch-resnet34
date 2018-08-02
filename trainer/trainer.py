@@ -67,7 +67,7 @@ class Trainer():
 
             loss = regr_loss2 + cls_loss
 
-            print(cls_loss,regr_loss2)
+            #print(cls_loss,regr_loss2)
 
 
             #loss=nn.MSELoss()
