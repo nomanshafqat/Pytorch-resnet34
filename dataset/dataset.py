@@ -63,10 +63,8 @@ class Trendage(Dataset):
             #print(box)
             self.bbox.append(box[:4])
             #print(box[:4],)
-            if len(bbox)==5:
-                self.labels.append(0)
-            else:
-                self.labels.append(1)
+            self.labels.append(box[4])
+
 
         print(len(self.bbox),len(self.data))
 

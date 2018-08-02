@@ -65,8 +65,9 @@ with torch.no_grad():
         regr=np.array(regr[0]).astype(int)
         clas=clas.numpy()[0]
         #print(regr)
-        print(np.argmax(clas,-1))
-
-        draw=cv2.rectangle(cv2.resize(input,(224,224)),(regr[0],regr[1]),(regr[2],regr[3]),color=(0,255,0),thickness=3)
+        clas=np.argmax(clas,-1)
+        draw=input
+        if clas==1:
+            draw=cv2.rectangle(cv2.resize(input,(224,224)),(regr[0],regr[1]),(regr[2],regr[3]),color=(0,255,0),thickness=3)
 
         cv2.imwrite(os.path.join("res",imgname),draw)
