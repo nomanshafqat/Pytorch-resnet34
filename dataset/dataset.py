@@ -66,7 +66,7 @@ class Trendage(Dataset):
             self.labels.append(box[4])
 
 
-        print(len(self.bbox),len(self.data))
+        #print(len(self.bbox),len(self.data))
 
 
 
