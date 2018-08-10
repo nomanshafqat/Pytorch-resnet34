@@ -1,3 +1,3 @@
 python main.py --dataset-path /Users/nomanshafqat/Desktop/newdata --epoch 14  --batch-size 50 --no-cuda --log-interval 1 --lr 1e-4
 
-python test.py --dir /Users/nomanshafqat/Desktop/newdata  --ckpt "/Users/nomanshafqat/Google Drive/Job/ModelState_29.Pvc2Ns"
+python test.py --dir /Users/nomanshafqat/Desktop/whole --ckpt "/Users/nomanshafqat/Google Drive/Job/ModelState_12.7DCmvZ"
