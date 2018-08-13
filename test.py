@@ -15,7 +15,7 @@ parser.add_argument('--dir', default="", help="Directory containing data")
 
 parser.add_argument('--cuda', action='store_true', default=False, help=' CUDA training')
 
-parser.add_argument('--ckpt', default="", help='without CUDA training')
+parser.add_argument('--ckpt', default="", help='checkpoint file')
 
 args = parser.parse_args()
 
